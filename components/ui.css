@@ -514,7 +514,9 @@ details.callout[open] .callout-chevron { transform: rotate(180deg); }
 .cm-host .cm-tag { background: var(--color-fog); color: var(--color-graphite); font-size: var(--text-meta); font-weight: 500; padding: 1px 8px; border-radius: var(--radius-pill); cursor: pointer; }
 .cm-host .cm-tag:hover { color: var(--color-ink-blue); }
 .cm-host .cm-highlight { background: var(--color-highlight); padding: 2px 0; border-radius: 4px; }
-.cm-host .cm-list-mark { color: var(--color-slate); }
+.cm-host .cm-list-mark { color: var(--color-slate); display: inline-block; text-indent: 0; white-space: pre; }
+.cm-host .cm-li-indent { display: inline-block; overflow: hidden; vertical-align: top; text-indent: 0; white-space: pre; }
+.cm-host .cm-bullet { display: inline-block; color: var(--color-slate); text-indent: 0; }
 .cm-host .cm-task-done { color: var(--color-slate); text-decoration: line-through; }
 .cm-host .cm-task-box { margin-right: 6px; }
 .cm-host .cm-editor .cm-line.cm-frontmatter { font-family: var(--font-geist-mono); font-size: var(--text-ui); color: var(--color-slate); background: var(--color-vellum); padding: 0 12px; line-height: 1.57; }
@@ -526,8 +528,8 @@ details.callout[open] .callout-chevron { transform: rotate(180deg); }
 .cm-host .cm-editor .cm-line.cm-codeblock { background: var(--color-vellum); border-left: 1px solid var(--color-rule); border-right: 1px solid var(--color-rule); font-family: var(--font-geist-mono); font-size: 13px; line-height: 1.57; padding: 0 16px; position: relative; }
 .cm-host .cm-editor .cm-line.cm-cb-first { border-top: 1px solid var(--color-rule); border-top-left-radius: var(--radius-input); border-top-right-radius: var(--radius-input); padding-top: 12px; }
 .cm-host .cm-editor .cm-line.cm-cb-last { border-bottom: 1px solid var(--color-rule); border-bottom-left-radius: var(--radius-input); border-bottom-right-radius: var(--radius-input); padding-bottom: 12px; }
-.cm-host .cm-editor .cm-line.cm-cb-head { height: 36px; line-height: 35px; padding: 0 72px 0 16px; border-bottom: 1px solid var(--color-rule); margin-bottom: 12px; }
-.cm-host .cm-editor .cm-line.cm-cb-head.cm-cb-last { margin-bottom: 0; }
+.cm-host .cm-editor .cm-line.cm-cb-head { height: 36px; line-height: 35px; padding: 0 72px 0 16px; border-bottom: 1px solid var(--color-rule); box-sizing: border-box; }
+.cm-host .cm-editor .cm-line.cm-cb-head + .cm-line.cm-codeblock { padding-top: 12px; }
 .cm-host .cm-editor .cm-line.cm-cb-foot { height: 12px; line-height: 12px; padding-top: 0; padding-bottom: 0; overflow: hidden; }
 .cm-host .cm-cb-lang { font-size: var(--text-meta); color: var(--color-slate); }
 .cm-host .cm-cb-head .codeblock-copy { position: absolute; right: 8px; top: 5px; }

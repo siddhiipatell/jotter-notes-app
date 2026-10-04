@@ -238,6 +238,23 @@ class CalloutHeaderWidget extends WidgetType {
   ignoreEvent() { return true; }
 }
 
+class BulletWidget extends WidgetType {
+  constructor(readonly width: number) { super(); }
+  eq(o: BulletWidget) { return o.width === this.width; }
+  toDOM() {
+    const el = document.createElement("span");
+    el.className = "cm-bullet";
+    el.style.width = `${this.width}em`;
+    el.textContent = "\u2022";
+    return el;
+  }
+}
+
+/** Width (em) of the marker column for a list mark, so wrapped lines can hang under the text. */
+export function listMarkerWidth(mark: string): number {
+  return /^[-*+]$/.test(mark) ? 1.25 : Math.max(1.5, (mark.length + 1) * 0.62 + 0.3);
+}
+
 class CopyWidget extends WidgetType {
   constructor(readonly code: string) { super(); }
   eq(o: CopyWidget) { return o.code === this.code; }
@@ -411,7 +428,19 @@ export function buildInline(state: EditorState, ranges: readonly { from: number;
               const line = doc.lineAt(node.from);
               if (!touches(state, line.from, line.to)) { out.push(HIDE.range(node.from, node.to + spaceAfter(node.to))); break; }
             }
-            out.push(markDeco("cm-list-mark").range(node.from, node.to));
+            const line = doc.lineAt(node.from);
+            const mark = doc.sliceString(node.from, node.to);
+            const w = listMarkerWidth(mark);
+            const indent = node.from - line.from;
+            const end = node.to + spaceAfter(node.to);
+            const hang = w + indent * 0.5;
+            out.push(Decoration.line({ class: "cm-li", attributes: { style: `padding-left:${hang}em;text-indent:-${hang}em` } }).range(line.from));
+            if (indent > 0) out.push(Decoration.mark({ class: "cm-li-indent", attributes: { style: `width:${indent * 0.5}em` } }).range(line.from, node.from));
+            if (/^[-*+]$/.test(mark) && !touches(state, line.from, line.to)) {
+              out.push(Decoration.replace({ widget: new BulletWidget(w) }).range(node.from, end));
+            } else {
+              out.push(Decoration.mark({ class: "cm-list-mark", attributes: { style: `width:${w}em` } }).range(node.from, end));
+            }
             break;
           }
           case "TaskMarker": {
