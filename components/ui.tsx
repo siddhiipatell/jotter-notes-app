@@ -186,10 +186,12 @@ export const GithubMark = ({ size = 16 }: { size?: number }) => (
   </svg>
 );
 
-export const JotterMark = ({ size = 20 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="var(--color-ink-blue)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M15 8v8a4 4 0 0 1-4 4H8" />
-    <circle cx="15" cy="4" r="0.75" fill="var(--color-ink-blue)" />
+/** App icon: Ink Blue badge, a single-stroke "J" with a dot (the dot reads as a note being jotted). */
+export const JotterMark = ({ size = 22 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <rect x="1" y="1" width="22" height="22" rx="6.5" fill="var(--color-ink-blue)" />
+    <path d="M14.5 9.5v5a3.5 3.5 0 0 1-3.5 3.5H9.5" stroke="var(--color-canvas)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="14.5" cy="6" r="1.3" fill="var(--color-canvas)" />
   </svg>
 );
 

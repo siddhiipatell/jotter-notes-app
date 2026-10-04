@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { HardDrive, Lock, FileText, Search, LockKeyhole, ArrowRight } from "lucide-react";
+import { HardDrive, Lock, FileText, Search, LockKeyhole, ArrowRight, Link as LinkIcon } from "lucide-react";
+import { Landing } from "./Landing";
 import { Button, GithubMark, Spinner, Wordmark } from "./ui";
 import { chooseRepo, logout, unlockVault, switchRepo } from "@/lib/ui/actions";
 import { loginUrl, listRepos } from "@/lib/ui/api";
@@ -9,42 +10,24 @@ import { useStore } from "@/lib/ui/store";
 import { ui } from "@/lib/ui/state";
 import type { RepoSummary } from "@/lib/types";
 
-function FeatureCard({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
-  return (
-    <li className="feature-card">
-      <span className="feature-icon">{icon}</span>
-      <h3>{title}</h3>
-      <p>{children}</p>
-    </li>
-  );
-}
+const AUTH_ERRORS: Record<string, string> = {
+  denied: "GitHub sign-in was cancelled.",
+  state: "The sign-in request expired. Please try again.",
+  exchange: "GitHub did not accept the sign-in. Check the OAuth app settings and try again.",
+  config: "The server is missing configuration (SESSION_SECRET).",
+};
 
 export function SignIn() {
   const initialError = useStore(ui, (s) => s.error);
   const [qError, setQError] = useState<string | null>(null);
   useEffect(() => {
-    const e = new URLSearchParams(window.location.search).get("error");
+    const q = new URLSearchParams(window.location.search);
+    const a = q.get("auth_error");
+    const e = a ? (AUTH_ERRORS[a] ?? a) : q.get("error");
     if (e) setQError(e);
   }, []);
   const error = qError ?? initialError;
-  return (
-    <main className="page dot-grid">
-      <div className="page-stack">
-        <section className="surface-panel hero" aria-labelledby="hero-title">
-          <Wordmark />
-          <h1 id="hero-title" className="display">Your notes, <span className="accent">in your own repo.</span></h1>
-          <p className="subhead">Write linked Markdown notes from any device.<br />They are saved to GitHub as plain files, and you decide who can read them.</p>
-          {error ? <p role="alert" className="form-error"><span className="dot dot-conflict" aria-hidden="true" />Sign-in problem: {error}</p> : null}
-          <a className="btn btn-primary btn-xl halo" href={loginUrl}><GithubMark /> Continue with GitHub</a>
-        </section>
-        <ul className="feature-grid" aria-label="Features">
-          <FeatureCard icon={<HardDrive size={24} strokeWidth={1.5} />} title="Local-first">Every edit is saved in your browser first, so typing is instant and nothing is lost.</FeatureCard>
-          <FeatureCard icon={<Lock size={24} strokeWidth={1.5} />} title="Encrypted">Notes are encrypted here with a passphrase only you know, before they reach GitHub.</FeatureCard>
-          <FeatureCard icon={<FileText size={24} strokeWidth={1.5} />} title="Plain Markdown">Your notes stay ordinary .md files that any Markdown editor can open.</FeatureCard>
-        </ul>
-      </div>
-    </main>
-  );
+  return <Landing error={error} />;
 }
 
 export function RepoPicker() {

@@ -133,7 +133,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  /* The landing page opts out (.landing) so its decorative motion always plays. */
+  *:where(:not(.landing, .landing *)) { transition: none !important; animation: none !important; }
 }
 
 :focus-visible {
